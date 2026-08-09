@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>IMRAN — Full-Stack Developer</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Tokyo+Zoo&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --void:#0a0704;
+  --ember:#ff6a3d;
+  --ember-bright:#ffb14d;
+  --spark:#ffe27a;
+  --crimson:#ff3d5e;
+  --paper:#f4efe6;
+  --paper-dim:#cfb9a7;
+  --line:rgba(255,178,77,.25);
+  --font-name:'Zen Tokyo Zoo',sans-serif;
+  --font-head:'Space Grotesk',sans-serif;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+}
+
+body{
+  background:var(--void);
+  color:var(--paper);
+  font-family:var(--font-head);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+::selection{
+  background:var(--ember);
+  color:#fff;
+}
+
+/* ================= LOADER ================= */
+
+#loader{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:var(--void);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:opacity .7s ease,visibility .7s ease;
+}
+
+#loader.hide{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.load-ring{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  border:2px solid transparent;
+  border-top-color:var(--ember-bright);
+  border-right-color:var(--ember);
+  animation:spin 1s linear infinite;
+  position:relative;
+}
+
+.load-ring::after{
+  content:"";
+  position:absolute;
+  inset:13px;
+  border-radius:50%;
+  border:2px solid transparent;
+  border-bottom-color:var(--spark);
+  animation:spin 1.6s linear infinite reverse;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+/* ================= NARUTO BACKGROUND ================= */
+
+.stage{
+  position:fixed;
+  inset:0;
+  z-index:0;
+
+  background-image:
+    linear-gradient(
+      rgba(10,7,4,.2),
+      rgba(10,7,4,.55)
+    ),
+    url("https://i.postimg.cc/G2T9T2xQ/uzumaki-naruto.jpg");
+
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+
+/* Bottom + edge darkness for text readability */
+
+.stage::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 30%,
+      rgba(10,7,4,.18) 60%,
+      rgba(10,7,4,.68) 100%
+    );
+  pointer-events:none;
+}
+
+/* ================= GRAIN ================= */
+
+.grain{
+  position:absolute;
+  inset:0;
+  opacity:.04;
+  mix-blend-mode:overlay;
+
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  pointer-events:none;
+}
+
+/* ================= PARTICLES ================= */
+
+#ambient{
+  position:fixed;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.spark-p{
+  position:absolute;
+  bottom:-5%;
+  border-radius:50%;
+  background:radial-gradient(circle,#fff2d8,transparent 70%);
+  opacity:.55;
+  animation:rise linear infinite;
+}
+
+@keyframes rise{
+  0%{
+    transform:translateY(0) translateX(0);
+    opacity:0;
+  }
+
+  12%{
+    opacity:.65;
+  }
+
+  100%{
+    transform:
+      translateY(-112vh)
+      translateX(var(--drift,20px));
+    opacity:0;
+  }
+}
+
+/* ================= BRAND ================= */
+
+.brand-mark{
+  position:fixed;
+  top:26px;
+  left:5vw;
+  z-index:5;
+
+  font-family:var(--font-name);
+  font-size:1.15rem;
+  letter-spacing:.05em;
+
+  color:#fff;
+
+  text-shadow:
+    0 0 15px rgba(255,178,77,.7);
+
+  opacity:0;
+  animation:fadeUp .8s ease .1s forwards;
+}
+
+/* ================= MAIN ================= */
+
+main{
+  position:relative;
+  z-index:4;
+
+  width:100%;
+  height:100vh;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  padding:24px;
+  text-align:center;
+
+  overflow-y:auto;
+}
+
+/* ================= HI I'M ================= */
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+
+  margin-bottom:22px;
+
+  font-size:.82rem;
+  font-weight:600;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+
+  color:var(--ember-bright);
+
+  text-shadow:0 0 12px rgba(255,178,77,.7);
+
+  opacity:0;
+  animation:fadeUp .9s ease .2s forwards;
+}
+
+.eyebrow .dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+
+  background:var(--ember-bright);
+
+  box-shadow:
+    0 0 12px var(--ember-bright);
+
+  animation:pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse{
+  0%,100%{
+    transform:scale(1);
+    opacity:1;
+  }
+
+  50%{
+    transform:scale(1.5);
+    opacity:.5;
+  }
+}
+
+/* ================= NAME ================= */
+
+h1.name{
+  font-family:var(--font-name);
+
+  font-size:clamp(3.6rem,13vw,10.5rem);
+  line-height:.9;
+  letter-spacing:.02em;
+
+  margin-bottom:20px;
+
+  color:#fff;
+
+  text-shadow:
+    0 4px 20px rgba(0,0,0,.7),
+    0 0 40px rgba(255,106,61,.45);
+
+  opacity:0;
+  animation:fadeUp 1s ease .35s forwards;
+}
+
+h1.name span{
+  background:linear-gradient(
+    120deg,
+    var(--ember-bright),
+    var(--spark) 55%,
+    var(--crimson) 80%,
+    var(--ember-bright)
+  );
+
+  background-size:250% auto;
+
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+
+  animation:gradientMove 5s ease-in-out infinite;
+}
+
+@keyframes gradientMove{
+  0%,100%{
+    background-position:0% 50%;
+  }
+
+  50%{
+    background-position:100% 50%;
+  }
+}
+
+/* ================= ROLE ================= */
+
+.role{
+  font-weight:600;
+  font-size:clamp(1rem,2.2vw,1.4rem);
+
+  color:#fff;
+
+  margin-bottom:14px;
+
+  text-shadow:0 2px 10px rgba(0,0,0,.9);
+
+  opacity:0;
+  animation:fadeUp 1s ease .5s forwards;
+}
+
+.role span{
+  color:var(--ember-bright);
+}
+
+/* ================= DESCRIPTION ================= */
+
+.desc{
+  max-width:480px;
+
+  color:#ecdfcf;
+
+  line-height:1.7;
+  font-size:.96rem;
+
+  margin-bottom:38px;
+
+  text-shadow:0 2px 10px rgba(0,0,0,.9);
+
+  opacity:0;
+  animation:fadeUp 1s ease .65s forwards;
+}
+
+/* ================= SOCIALS ================= */
+
+.socials{
+  display:flex;
+  gap:16px;
+
+  margin-bottom:38px;
+
+  opacity:0;
+  animation:fadeUp 1s ease .8s forwards;
+}
+
+.social-link{
+  width:48px;
+  height:48px;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:1px solid rgba(255,255,255,.2);
+
+  color:#fff;
+
+  background:rgba(0,0,0,.25);
+
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+
+  transition:.35s ease;
+}
+
+.social-link:hover{
+  border-color:var(--ember-bright);
+
+  color:var(--void);
+  background:var(--ember-bright);
+
+  box-shadow:
+    0 0 26px rgba(255,178,77,.7);
+
+  transform:
+    translateY(-5px)
+    rotate(-8deg);
+}
+
+.social-link svg{
+  width:19px;
+  height:19px;
+}
+
+/* ================= VIDEO PLAYER ================= */
+
+.video-card{
+  width:100%;
+  max-width:420px;
+
+  border-radius:18px;
+  padding:16px;
+
+  background:rgba(10,7,4,.45);
+  border:1px solid var(--line);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+
+  opacity:0;
+  animation:fadeUp 1s ease .95s forwards;
+}
+
+.video-card-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+
+  margin-bottom:12px;
+}
+
+.video-card-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  font-size:.85rem;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+
+  color:var(--ember-bright);
+}
+
+.video-card-title .dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--crimson);
+  box-shadow:0 0 10px var(--crimson);
+}
+
+.video-actions{
+  display:flex;
+  gap:8px;
+}
+
+.video-next-btn,
+.video-download-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  padding:8px 14px;
+  border-radius:999px;
+
+  font-family:var(--font-head);
+  font-size:.78rem;
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:.25s ease;
+}
+
+.video-next-btn{
+  color:var(--void);
+  background:linear-gradient(120deg,var(--ember-bright),var(--spark));
+
+  border:none;
+}
+
+.video-next-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(255,178,77,.45);
+}
+
+.video-download-btn{
+  color:var(--ember-bright);
+  background:rgba(255,178,77,.08);
+
+  border:1px solid var(--line);
+}
+
+.video-download-btn:hover{
+  transform:translateY(-2px);
+  border-color:var(--ember-bright);
+  box-shadow:0 6px 20px rgba(255,178,77,.25);
+}
+
+.video-next-btn:active,
+.video-download-btn:active{
+  transform:translateY(0);
+}
+
+.video-next-btn:disabled,
+.video-download-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+  transform:none;
+  box-shadow:none;
+}
+
+.video-frame{
+  position:relative;
+
+  width:100%;
+  aspect-ratio:16/9;
+
+  border-radius:12px;
+  overflow:hidden;
+
+  background:#000;
+  border:1px solid var(--line);
+}
+
+.video-frame video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.video-status{
+  margin-top:10px;
+
+  font-size:.78rem;
+  color:var(--paper-dim);
+
+  min-height:1em;
+}
+
+/* ================= UNIVERSAL DOWNLOADER ================= */
+
+.dl-input-row{
+  display:flex;
+  gap:8px;
+}
+
+.dl-input{
+  flex:1;
+  min-width:0;
+
+  padding:10px 12px;
+  border-radius:10px;
+
+  border:1px solid var(--line);
+  background:rgba(0,0,0,.3);
+
+  color:var(--paper);
+  font-family:var(--font-head);
+  font-size:.82rem;
+}
+
+.dl-input::placeholder{
+  color:var(--paper-dim);
+}
+
+.dl-input:focus{
+  outline:none;
+  border-color:var(--ember-bright);
+}
+
+.dl-hint{
+  margin-top:8px;
+
+  font-size:.7rem;
+  color:var(--paper-dim);
+}
+
+.dl-result{
+  display:none;
+  margin-top:14px;
+}
+
+.dl-result.show{
+  display:block;
+}
+
+.dl-thumb{
+  width:100%;
+  border-radius:10px;
+  margin-bottom:10px;
+  display:block;
+
+  border:1px solid var(--line);
+}
+
+.dl-title{
+  font-size:.85rem;
+  color:var(--paper);
+  line-height:1.4;
+
+  margin-bottom:12px;
+}
+
+.dl-quality-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+/* ================= RANDOM GF ================= */
+
+.gf-frame{
+  position:relative;
+
+  width:100%;
+  aspect-ratio:3/4;
+
+  border-radius:12px;
+  overflow:hidden;
+
+  background:#000;
+  border:1px solid var(--line);
+}
+
+.gf-frame img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+
+  opacity:0;
+  transition:opacity .4s ease;
+}
+
+.gf-frame img.loaded{
+  opacity:1;
+}
+
+.gf-caption{
+  margin-top:10px;
+
+  font-size:.85rem;
+  color:var(--paper);
+  font-style:italic;
+
+  min-height:1.2em;
+}
+
+.gf-name-link{
+  display:none;
+
+  margin-top:4px;
+
+  font-size:.75rem;
+  color:var(--ember-bright);
+}
+
+.gf-name-link:hover{
+  text-decoration:underline;
+}
+
+/* ================= TATTOO GENERATOR ================= */
+
+.tat-form-row{
+  display:flex;
+  gap:8px;
+  margin-bottom:8px;
+}
+
+.tat-input{
+  flex:1;
+  min-width:0;
+
+  padding:10px 12px;
+  border-radius:10px;
+
+  border:1px solid var(--line);
+  background:rgba(0,0,0,.3);
+
+  color:var(--paper);
+  font-family:var(--font-head);
+  font-size:.82rem;
+}
+
+.tat-input.tat-template{
+  flex:0 0 74px;
+}
+
+.tat-input::placeholder{
+  color:var(--paper-dim);
+}
+
+.tat-input:focus{
+  outline:none;
+  border-color:var(--ember-bright);
+}
+
+.tat-actions{
+  display:flex;
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.tat-frame{
+  position:relative;
+
+  width:100%;
+  aspect-ratio:4/3;
+
+  border-radius:12px;
+  overflow:hidden;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#000;
+  border:1px solid var(--line);
+}
+
+.tat-frame img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+
+  opacity:0;
+  transition:opacity .4s ease;
+}
+
+.tat-frame img.loaded{
+  opacity:1;
+}
+
+.tat-placeholder{
+  font-size:.78rem;
+  color:var(--paper-dim);
+  padding:0 16px;
+  text-align:center;
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(26px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:640px){
+
+  .stage{
+    background-position:center;
+  }
+
+  .brand-mark{
+    left:6vw;
+  }
+
+  .socials{
+    gap:12px;
+  }
+
+  .social-link{
+    width:44px;
+    height:44px;
+  }
+
+  .desc{
+    max-width:340px;
+    font-size:.9rem;
+  }
+
+  .video-card{
+    max-width:340px;
+  }
+
+  .gf-frame{
+    aspect-ratio:4/5;
+  }
+}
+
+/* ================= REDUCED MOTION ================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  #loader{
+    display:none;
+  }
+
+  .spark-p{
+    display:none;
+  }
+
+  .eyebrow,
+  h1.name,
+  .role,
+  .desc,
+  .socials,
+  .video-card,
+  .brand-mark{
+    opacity:1;
+    animation:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="load-ring"></div>
+</div>
+
+<!-- Naruto Background -->
+<div class="stage">
+  <div class="grain"></div>
+</div>
+
+<!-- Particles -->
+<div id="ambient"></div>
+
+<!-- Logo -->
+<div class="brand-mark">
+  IMRAN
+</div>
+
+<!-- Main Content -->
+<main>
+
+  <div class="eyebrow">
+    <span class="dot"></span>
+    Hi, I'm
+  </div>
+
+  <h1 class="name">
+    IMR<span>A</span>N
+  </h1>
+
+  <p class="role">
+    Full-Stack Developer
+    <span>&</span>
+    Problem Solver
+  </p>
+
+  <p class="desc">
+    I build fast, responsive and scalable web applications
+    with clean code and modern technologies.
+  </p>
+
+  <div class="socials">
+
+    <!-- GitHub -->
+    <a
+      class="social-link"
+      href="#"
+      aria-label="GitHub"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.7.1-.7 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.3 3.6 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6a4.6 4.6 0 0 1 1.2-3.2 4.3 4.3 0 0 1 .1-3.2s1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 5 18.3 5.3 18.3 5.3a4.3 4.3 0 0 1 .1 3.2 4.6 4.6 0 0 1 1.2 3.2c0 4.7-2.8 5.7-5.5 6 .4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"/>
+      </svg>
+    </a>
+
+    <!-- LinkedIn -->
+    <a
+      class="social-link"
+      href="#"
+      aria-label="LinkedIn"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.05c.53-1 1.83-2 3.77-2 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V21h-4V9Z"/>
+      </svg>
+    </a>
+
+    <!-- Instagram -->
+    <a
+      class="social-link"
+      href="#"
+      aria-label="Instagram"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 2 .25 2.5.42a5 5 0 0 1 1.8 1.2 5 5 0 0 1 1.2 1.8c.17.5.36 1.3.42 2.5.07 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.06 1.2-.25 2-.42 2.5a5 5 0 0 1-1.2 1.8 5 5 0 0 1-1.8 1.2c-.5.17-1.3.36-2.5.42-1.3.07-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.06-2-.25-2.5-.42a5 5 0 0 1-1.8-1.2 5 5 0 0 1-1.2-1.8c-.17-.5-.36-1.3-.42-2.5C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.06-1.2.25-2 .42-2.5a5 5 0 0 1 1.2-1.8 5 5 0 0 1 1.8-1.2c.5-.17 1.3-.36 2.5-.42C8.4 2.2 8.8 2.2 12 2.2Zm0 5.2a4.6 4.6 0 1 0 0 9.2 4.6 4.6 0 0 0 0-9.2Zm0 1.8a2.8 2.8 0 1 1 0 5.6 2.8 2.8 0 0 1 0-5.6Zm4.8-2a1.08 1.08 0 1 0 0 2.16 1.08 1.08 0 0 0 0-2.16Z"/>
+      </svg>
+    </a>
+
+  </div>
+
+  <!-- Random Anime Video Player -->
+  <div class="video-card">
+    <div class="video-card-head">
+      <div class="video-card-title">
+        <span class="dot"></span>
+        Random Anime Clip
+      </div>
+      <div class="video-actions">
+        <button class="video-next-btn" id="nextVideoBtn" type="button">
+          New Video
+        </button>
+        <button class="video-download-btn" id="downloadVideoBtn" type="button">
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="video-frame">
+      <video id="animeVideo" controls autoplay muted loop playsinline>
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <div class="video-status" id="videoStatus"></div>
+  </div>
+
+  <!-- Universal Video Downloader -->
+  <div class="video-card">
+    <div class="video-card-head">
+      <div class="video-card-title">
+        <span class="dot"></span>
+        Video Downloader
+      </div>
+    </div>
+
+    <div class="dl-input-row">
+      <input
+        class="dl-input"
+        id="dlUrlInput"
+        type="url"
+        inputmode="url"
+        placeholder="Paste a Facebook, TikTok, YouTube, Instagram… link"
+        autocomplete="off"
+      >
+      <button class="video-next-btn" id="dlFetchBtn" type="button">
+        Get Links
+      </button>
+    </div>
+
+    <p class="dl-hint">
+      Supports Facebook, TikTok, Twitter/X, Instagram, YouTube, Pinterest, Google Drive, CapCut, Likee &amp; Threads links.
+    </p>
+
+    <div class="dl-result" id="dlResult">
+      <img class="dl-thumb" id="dlThumb" alt="Video thumbnail">
+      <p class="dl-title" id="dlTitle"></p>
+      <div class="dl-quality-row" id="dlQualityRow"></div>
+    </div>
+
+    <div class="video-status" id="dlStatus"></div>
+  </div>
+
+  <!-- Random GF -->
+  <div class="video-card">
+    <div class="video-card-head">
+      <div class="video-card-title">
+        <span class="dot"></span>
+        Random GF
+      </div>
+      <button class="video-next-btn" id="nextGfBtn" type="button">
+        New GF
+      </button>
+    </div>
+
+    <div class="gf-frame">
+      <img id="gfImage" alt="Random anime character">
+    </div>
+
+    <p class="gf-caption" id="gfCaption"></p>
+    <a class="gf-name-link" id="gfNameLink" target="_blank" rel="noopener noreferrer"></a>
+
+    <div class="video-status" id="gfStatus"></div>
+  </div>
+
+  <!-- Tattoo Generator -->
+  <div class="video-card">
+    <div class="video-card-head">
+      <div class="video-card-title">
+        <span class="dot"></span>
+        Tattoo Generator
+      </div>
+    </div>
+
+    <div class="tat-form-row">
+      <input
+        class="tat-input"
+        id="tatNameInput"
+        type="text"
+        placeholder="Name (e.g. ASIF)"
+        autocomplete="off"
+        value="IMRAN"
+      >
+      <input
+        class="tat-input tat-template"
+        id="tatTemplateInput"
+        type="number"
+        min="1"
+        max="20"
+        value="7"
+        aria-label="Template number"
+      >
+    </div>
+
+    <div class="tat-actions">
+      <button class="video-next-btn" id="tatGenerateBtn" type="button">
+        Generate
+      </button>
+      <button class="video-download-btn" id="tatDownloadBtn" type="button" disabled>
+        Download
+      </button>
+    </div>
+
+    <div class="tat-frame">
+      <img id="tatImage" alt="Generated tattoo preview">
+      <p class="tat-placeholder" id="tatPlaceholder">
+        Enter a name and template number, then tap Generate.
+      </p>
+    </div>
+
+    <div class="video-status" id="tatStatus"></div>
+  </div>
+
+</main>
+
+<script src="script.js"></script>
+
+</body>
+</html>
